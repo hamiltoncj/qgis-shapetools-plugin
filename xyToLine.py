@@ -59,7 +59,7 @@ class XYToLineAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterFeatureSource(
                 self.PrmInputLayer,
                 tr('Input layer'),
-                [QgsProcessing.TypeFile | QgsProcessing.TypeVectorPoint])
+                [QgsProcessing.SourceType.TypeFile | QgsProcessing.SourceType.TypeVectorPoint])
         )
         self.addParameter(
             QgsProcessingParameterCrs(
@@ -93,7 +93,7 @@ class XYToLineAlgorithm(QgsProcessingAlgorithm):
                 self.PrmStartXField,
                 tr('Starting X Field (lon)'),
                 parentLayerParameterName=self.PrmInputLayer,
-                type=QgsProcessingParameterField.Any,
+                type=QgsProcessingParameterField.DataType.Any,
                 optional=True
             )
         )
@@ -102,7 +102,7 @@ class XYToLineAlgorithm(QgsProcessingAlgorithm):
                 self.PrmStartYField,
                 tr('Starting Y Field (lat)'),
                 parentLayerParameterName=self.PrmInputLayer,
-                type=QgsProcessingParameterField.Any,
+                type=QgsProcessingParameterField.DataType.Any,
                 optional=True
             )
         )
@@ -118,7 +118,7 @@ class XYToLineAlgorithm(QgsProcessingAlgorithm):
                 self.PrmEndXField,
                 tr('Ending X Field (lon)'),
                 parentLayerParameterName=self.PrmInputLayer,
-                type=QgsProcessingParameterField.Any,
+                type=QgsProcessingParameterField.DataType.Any,
                 optional=True
             )
         )
@@ -127,7 +127,7 @@ class XYToLineAlgorithm(QgsProcessingAlgorithm):
                 self.PrmEndYField,
                 tr('Ending Y Field (lat)'),
                 parentLayerParameterName=self.PrmInputLayer,
-                type=QgsProcessingParameterField.Any,
+                type=QgsProcessingParameterField.DataType.Any,
                 optional=True
             )
         )
@@ -184,7 +184,7 @@ class XYToLineAlgorithm(QgsProcessingAlgorithm):
             msg = tr('The layer geometry cannot be used for both the starting and ending points.')
             raise QgsProcessingException(msg)
 
-        if (startUseGeom or endUseGeom) and (source.wkbType() != QgsWkbTypes.Point):
+        if (startUseGeom or endUseGeom) and (source.wkbType() != QgsWkbTypes.Type.Point):
             msg = tr('In order to use the layer geometry for the start or ending points, the input layer must be of type Point')
             raise QgsProcessingException(msg)
 
@@ -200,17 +200,17 @@ class XYToLineAlgorithm(QgsProcessingAlgorithm):
         if isMultiPart:
             (lineSink, lineDest_id) = self.parameterAsSink(
                 parameters, self.PrmOutputLineLayer, context, source.fields(),
-                QgsWkbTypes.MultiLineString, sinkCrs)
+                QgsWkbTypes.Type.MultiLineString, sinkCrs)
         else:
             (lineSink, lineDest_id) = self.parameterAsSink(
                 parameters, self.PrmOutputLineLayer, context, source.fields(),
-                QgsWkbTypes.LineString, sinkCrs)
+                QgsWkbTypes.Type.LineString, sinkCrs)
 
         skip_pt = True if self.PrmOutputPointLayer not in parameters or parameters[self.PrmOutputPointLayer] is None else False
         if (showStart or showEnd) and not skip_pt:
             (ptSink, ptDest_id) = self.parameterAsSink(
                 parameters, self.PrmOutputPointLayer, context, source.fields(),
-                QgsWkbTypes.Point, sinkCrs)
+                QgsWkbTypes.Type.Point, sinkCrs)
         else:
             if showStart or showEnd:
                 feedback.pushInfo(tr('Output point layer was set to [skip output]. No point layer will be generated.'))
@@ -354,7 +354,7 @@ class XYToLineAlgorithm(QgsProcessingAlgorithm):
         file = os.path.dirname(__file__) + '/index.html'
         if not os.path.exists(file):
             return ''
-        return QUrl.fromLocalFile(file).toString(QUrl.FullyEncoded)
+        return QUrl.fromLocalFile(file).toString(QUrl.ComponentFormattingOption.FullyEncoded)
 
     def shortHelpString(self):
         file = os.path.dirname(__file__) + '/doc/XYtoLineAlgorithm.help'

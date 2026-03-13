@@ -61,14 +61,14 @@ class GeodesicPointDecimateAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterFeatureSource(
                 self.PrmInputLayer,
                 tr('Input point layer'),
-                [QgsProcessing.TypeVectorPoint])
+                [QgsProcessing.SourceType.TypeVectorPoint])
         )
         self.addParameter(
             QgsProcessingParameterField(
                 self.PrmOrderField,
                 tr('Point order field'),
                 parentLayerParameterName=self.PrmInputLayer,
-                type=QgsProcessingParameterField.Any,
+                type=QgsProcessingParameterField.DataType.Any,
                 optional=True
             )
         )
@@ -77,7 +77,7 @@ class GeodesicPointDecimateAlgorithm(QgsProcessingAlgorithm):
                 self.PrmGroupField,
                 tr('Point grouuping field'),
                 parentLayerParameterName=self.PrmInputLayer,
-                type=QgsProcessingParameterField.Any,
+                type=QgsProcessingParameterField.DataType.Any,
                 optional=True
             )
         )
@@ -97,7 +97,7 @@ class GeodesicPointDecimateAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 self.PrmMinDistance,
                 tr('Minimum distance between points'),
-                QgsProcessingParameterNumber.Double,
+                QgsProcessingParameterNumber.Type.Double,
                 defaultValue=10)
         )
         self.addParameter(
@@ -118,7 +118,7 @@ class GeodesicPointDecimateAlgorithm(QgsProcessingAlgorithm):
                 self.PrmTimeField,
                 tr('Time field (Must be a DateTime field)'),
                 parentLayerParameterName=self.PrmInputLayer,
-                type=QgsProcessingParameterField.DateTime,
+                type=QgsProcessingParameterField.DataType.DateTime,
                 optional=True
             )
         )
@@ -126,7 +126,7 @@ class GeodesicPointDecimateAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 self.PrmMinTime,
                 tr('Minimum time between points'),
-                QgsProcessingParameterNumber.Double,
+                QgsProcessingParameterNumber.Type.Double,
                 defaultValue=10)
         )
         self.addParameter(
@@ -354,7 +354,7 @@ class GeodesicPointDecimateAlgorithm(QgsProcessingAlgorithm):
         file = os.path.dirname(__file__) + '/index.html'
         if not os.path.exists(file):
             return ''
-        return QUrl.fromLocalFile(file).toString(QUrl.FullyEncoded)
+        return QUrl.fromLocalFile(file).toString(QUrl.ComponentFormattingOption.FullyEncoded)
 
     def shortHelpString(self):
         file = os.path.dirname(__file__) + '/doc/GeodesicPointDecimateAlgorithm.help'

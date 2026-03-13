@@ -73,15 +73,15 @@ class CreateHeartAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         file = os.path.dirname(__file__) + '/index.html'
         if not os.path.exists(file):
             return ''
-        return QUrl.fromLocalFile(file).toString(QUrl.FullyEncoded)
+        return QUrl.fromLocalFile(file).toString(QUrl.ComponentFormattingOption.FullyEncoded)
 
     def inputLayerTypes(self):
-        return [QgsProcessing.TypeVectorPoint]
+        return [QgsProcessing.SourceType.TypeVectorPoint]
 
     def outputWkbType(self, input_wkb_type):
         if self.shape_type == 0:
-            return (QgsWkbTypes.Polygon)
-        return (QgsWkbTypes.LineString)
+            return (QgsWkbTypes.Type.Polygon)
+        return (QgsWkbTypes.Type.LineString)
 
     def outputFields(self, input_fields):
         if self.export_geom:
@@ -107,21 +107,21 @@ class CreateHeartAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         param = QgsProcessingParameterNumber(
             self.PrmStartingAngle,
             tr('Starting angle'),
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=0,
             optional=False)
         param.setIsDynamic(True)
         param.setDynamicPropertyDefinition(QgsPropertyDefinition(
             self.PrmStartingAngle,
             tr('Starting angle'),
-            QgsPropertyDefinition.Double))
+            QgsPropertyDefinition.StandardPropertyTemplate.Double))
         param.setDynamicLayerParameterName('INPUT')
         self.addParameter(param)
 
         param = QgsProcessingParameterNumber(
             self.PrmRadius,
             tr('Maximum radius'),
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=40.0,
             minValue=0,
             optional=False)
@@ -129,7 +129,7 @@ class CreateHeartAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         param.setDynamicPropertyDefinition(QgsPropertyDefinition(
             self.PrmRadius,
             tr('Maximum radius'),
-            QgsPropertyDefinition.Double))
+            QgsPropertyDefinition.StandardPropertyTemplate.Double))
         param.setDynamicLayerParameterName('INPUT')
         self.addParameter(param)
 
@@ -145,7 +145,7 @@ class CreateHeartAlgorithm(QgsProcessingFeatureBasedAlgorithm):
             QgsProcessingParameterNumber(
                 self.PrmDrawingSegments,
                 tr('Number of drawing segments'),
-                QgsProcessingParameterNumber.Integer,
+                QgsProcessingParameterNumber.Type.Integer,
                 defaultValue=720,
                 minValue=4,
                 optional=True)

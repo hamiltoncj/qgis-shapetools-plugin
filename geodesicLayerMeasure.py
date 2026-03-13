@@ -55,7 +55,7 @@ class GeodesicLayerMeasureAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterFeatureSource(
                 self.PrmInputLayer,
                 tr('Line or polygon layer'),
-                [QgsProcessing.TypeVectorLine, QgsProcessing.TypeVectorPolygon])
+                [QgsProcessing.SourceType.TypeVectorLine, QgsProcessing.SourceType.TypeVectorPolygon])
         )
         self.addParameter(
             QgsProcessingParameterBoolean(
@@ -143,7 +143,7 @@ class GeodesicLayerMeasureAlgorithm(QgsProcessingAlgorithm):
             
 
         (sink, dest_id) = self.parameterAsSink(
-            parameters, self.PrmOutputLayer, context, f, QgsWkbTypes.LineString, srcCRS)
+            parameters, self.PrmOutputLayer, context, f, QgsWkbTypes.Type.LineString, srcCRS)
 
         if srcCRS != epsg4326:
             geomTo4326 = QgsCoordinateTransform(srcCRS, epsg4326, QgsProject.instance())
@@ -160,7 +160,7 @@ class GeodesicLayerMeasureAlgorithm(QgsProcessingAlgorithm):
             if feedback.isCanceled():
                 break
 
-            if geomtype == QgsWkbTypes.LineGeometry:
+            if geomtype == QgsWkbTypes.GeometryType.LineGeometry:
                 if feature.geometry().isMultipart():
                     ptdata = [feature.geometry().asMultiPolyline()]
                 else:
@@ -299,17 +299,17 @@ class GeodesicLayerMeasureAlgorithm(QgsProcessingAlgorithm):
         elif units == 1: # meters
             return distance
         elif units == 2: # centimeters
-            return distance * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceMeters, QgsUnitTypes.DistanceCentimeters)
+            return distance * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceMeters, QgsUnitTypes.DistanceUnit.DistanceCentimeters)
         elif units == 3: # miles
-            return distance * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceMeters, QgsUnitTypes.DistanceMiles)
+            return distance * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceMeters, QgsUnitTypes.DistanceUnit.DistanceMiles)
         elif units == 4: # yards
-            return distance * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceMeters, QgsUnitTypes.DistanceYards)
+            return distance * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceMeters, QgsUnitTypes.DistanceUnit.DistanceYards)
         elif units == 5: # feet
-            return distance * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceMeters, QgsUnitTypes.DistanceFeet)
+            return distance * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceMeters, QgsUnitTypes.DistanceUnit.DistanceFeet)
         elif units == 6: # inches
-            return distance * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceMeters, QgsUnitTypes.DistanceFeet) * 12
+            return distance * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceMeters, QgsUnitTypes.DistanceUnit.DistanceFeet) * 12
         elif units == 7: # nautical miles
-            return distance * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceMeters, QgsUnitTypes.DistanceNauticalMiles)
+            return distance * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceMeters, QgsUnitTypes.DistanceUnit.DistanceNauticalMiles)
 
     def name(self):
         return 'measurelayer'
@@ -330,7 +330,7 @@ class GeodesicLayerMeasureAlgorithm(QgsProcessingAlgorithm):
         file = os.path.dirname(__file__) + '/index.html'
         if not os.path.exists(file):
             return ''
-        return QUrl.fromLocalFile(file).toString(QUrl.FullyEncoded)
+        return QUrl.fromLocalFile(file).toString(QUrl.ComponentFormattingOption.FullyEncoded)
 
     def createInstance(self):
         return GeodesicLayerMeasureAlgorithm()
@@ -345,7 +345,7 @@ class StylePostProcessor(QgsProcessingLayerPostProcessorInterface):
 
         label = QgsPalLayerSettings()
         label.fieldName = 'label'
-        label.placement = QgsPalLayerSettings.Line
+        label.placement = QgsPalLayerSettings.Placement.Line
         format = label.format()
         format.setColor(settings.measureTextColor)
         format.setNamedStyle('Bold')

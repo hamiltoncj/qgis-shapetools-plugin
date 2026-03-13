@@ -189,14 +189,14 @@ class SettingsWidget(QDialog, FORM_CLASS):
             self.systemEllipsoidComboBox.setEnabled(False)
             self.historicalEllipsoidComboBox.setEnabled(False)
         elif self.ellipsoidComboBox.currentIndex() == 2:  # Historical Ellipsoids
-            index = self.historicalEllipsoidComboBox.findData(settings.ellipseAcronym, flags=Qt.MatchExactly)
+            index = self.historicalEllipsoidComboBox.findData(settings.ellipseAcronym, flags=Qt.MatchFlag.MatchExactly)
             if index == -1:
                 index = 0
             self.historicalEllipsoidComboBox.setCurrentIndex(index)
             self.systemEllipsoidComboBox.setEnabled(False)
             self.historicalEllipsoidComboBox.setEnabled(True)
         else:  # System Ellipsoids
-            index = self.systemEllipsoidComboBox.findData(settings.ellipseAcronym, flags=Qt.MatchExactly)
+            index = self.systemEllipsoidComboBox.findData(settings.ellipseAcronym, flags=Qt.MatchFlag.MatchExactly)
             if index == -1:
                 settings.setEllipsoid('WGS84')
                 index = self.wgs84index

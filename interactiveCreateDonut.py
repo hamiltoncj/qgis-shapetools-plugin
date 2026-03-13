@@ -71,7 +71,7 @@ class InteractiveCreateDonutAlgorithm(QgsProcessingAlgorithm):
         file = os.path.dirname(__file__) + '/index.html'
         if not os.path.exists(file):
             return ''
-        return QUrl.fromLocalFile(file).toString(QUrl.FullyEncoded)
+        return QUrl.fromLocalFile(file).toString(QUrl.ComponentFormattingOption.FullyEncoded)
 
     def supportInPlaceEdit(self, layer):
         return True
@@ -95,7 +95,7 @@ class InteractiveCreateDonutAlgorithm(QgsProcessingAlgorithm):
         param = QgsProcessingParameterNumber(
             self.PrmOuterRadius,
             tr('Outer radius'),
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=20.0,
             minValue=0,
             optional=False)
@@ -104,7 +104,7 @@ class InteractiveCreateDonutAlgorithm(QgsProcessingAlgorithm):
         param = QgsProcessingParameterNumber(
             self.PrmInnerRadius,
             tr('Inner radius'),
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=10.0,
             minValue=0,
             optional=False)
@@ -122,7 +122,7 @@ class InteractiveCreateDonutAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 self.PrmDrawingSegments,
                 tr('Number of drawing segments'),
-                QgsProcessingParameterNumber.Integer,
+                QgsProcessingParameterNumber.Type.Integer,
                 defaultValue=72,
                 minValue=4,
                 optional=True)
@@ -153,11 +153,11 @@ class InteractiveCreateDonutAlgorithm(QgsProcessingAlgorithm):
         if shape_type == 0:
             (sink, dest_id) = self.parameterAsSink(
                 parameters, self.PrmOutput,
-                context, QgsFields(), QgsWkbTypes.Polygon, epsg4326)
+                context, QgsFields(), QgsWkbTypes.Type.Polygon, epsg4326)
         else:
             (sink, dest_id) = self.parameterAsSink(
                 parameters, self.PrmOutput,
-                context, QgsFields(), QgsWkbTypes.MultiLineString, epsg4326)
+                context, QgsFields(), QgsWkbTypes.Type.MultiLineString, epsg4326)
 
         try:
             pts_in = []

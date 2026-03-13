@@ -43,8 +43,8 @@ class LineDigitizerTool(QgsMapToolEmitPoint):
 
     def activate(self):
         '''When activated set the cursor to a crosshair.'''
-        self.canvas.setCursor(Qt.CrossCursor)
-        self.snapcolor = QgsSettings().value( "/qgis/digitizing/snap_color" , QColor( Qt.magenta ) )
+        self.canvas.setCursor(Qt.CursorShape.CrossCursor)
+        self.snapcolor = QgsSettings().value( "/qgis/digitizing/snap_color" , QColor( Qt.GlobalColor.magenta ) )
 
     def deactivate(self):
         self.removeVertexMarker()
@@ -60,7 +60,7 @@ class LineDigitizerTool(QgsMapToolEmitPoint):
             from .lineDigitizer import LineDigitizerWidget
             self.lineDigitizerDialog = LineDigitizerWidget(self.iface, self.iface.mainWindow())
 
-        if layer.geometryType() == QgsWkbTypes.LineGeometry:
+        if layer.geometryType() == QgsWkbTypes.GeometryType.LineGeometry:
             self.lineDigitizerDialog.closeLineCheckBox.setEnabled(True)
         else:
             self.lineDigitizerDialog.closeLineCheckBox.setEnabled(False)
@@ -72,7 +72,7 @@ class LineDigitizerTool(QgsMapToolEmitPoint):
             self.lineDigitizerDialog.valuesTextEdit.clear()
             self.lineDigitizerDialog.show()
         except Exception:
-            self.iface.messageBar().pushMessage("", tr("Clicked location is invalid"), level=Qgis.Warning, duration=4)
+            self.iface.messageBar().pushMessage("", tr("Clicked location is invalid"), level=Qgis.MessageLevel.Warning, duration=4)
 
     def canvasMoveEvent(self, event):
         '''Show when the user mouses over a vector vertex in snapping mode.'''
@@ -86,7 +86,7 @@ class LineDigitizerTool(QgsMapToolEmitPoint):
                 self.vertex.setIconSize(12)
                 self.vertex.setPenWidth(2)
                 self.vertex.setColor(self.snapcolor)
-                self.vertex.setIconType(QgsVertexMarker.ICON_BOX)
+                self.vertex.setIconType(QgsVertexMarker.IconType.ICON_BOX)
             self.vertex.setCenter(match.point())
             return (match.point()) # Returns QgsPointXY
         else:
@@ -116,17 +116,17 @@ class LineDigitizerWidget(QDialog, FORM_CLASS):
             valuestr = str(self.valuesTextEdit.toPlainText()).strip()
             values = re.split(r'[\s,;]+', valuestr)
             if (len(values) == 0) or (len(values) & 1) == 1:
-                self.iface.messageBar().pushMessage("", tr("Enter bearing distance pairs"), level=Qgis.Warning, duration=4)
+                self.iface.messageBar().pushMessage("", tr("Enter bearing distance pairs"), level=Qgis.MessageLevel.Warning, duration=4)
                 return
             for x, v in enumerate(values):
                 values[x] = float(v)
             units = self.unitsComboBox.currentIndex()  # 0 km, 1 m, 2 nm, 3 miles, 4 yards, 5 feet, 6 inches, 7 cm
         except Exception:
-            self.iface.messageBar().pushMessage("", tr("One or more entered values were invalid"), level=Qgis.Warning, duration=4)
+            self.iface.messageBar().pushMessage("", tr("One or more entered values were invalid"), level=Qgis.MessageLevel.Warning, duration=4)
             return
         layer = self.iface.activeLayer()
         if layer is None:
-            self.iface.messageBar().pushMessage("", tr("No point or line layer selected"), level=Qgis.Warning, duration=4)
+            self.iface.messageBar().pushMessage("", tr("No point or line layer selected"), level=Qgis.MessageLevel.Warning, duration=4)
             return
 
         numpairs = len(values) >> 1  # Divide by 2
@@ -135,7 +135,7 @@ class LineDigitizerWidget(QDialog, FORM_CLASS):
         pt = self.pt
         destCRS = layer.crs()
         transform = QgsCoordinateTransform(epsg4326, destCRS, QgsProject.instance())
-        if layer.geometryType() == QgsWkbTypes.PointGeometry:
+        if layer.geometryType() == QgsWkbTypes.GeometryType.PointGeometry:
             # output the clicked on point
             ptStart = transform.transform(self.pt.x(), self.pt.y())
             feat = QgsFeature(layer.fields())
@@ -160,11 +160,11 @@ class LineDigitizerWidget(QDialog, FORM_CLASS):
                 pt = QgsPoint(g['lon2'], g['lat2'])  # Keep this in EPSG:4326
                 pt_trans = transform.transform(g['lon2'], g['lat2'])  # Transformed version
                 pts.append(pt_trans)
-            if layer.geometryType() == QgsWkbTypes.PolygonGeometry or closeline:
+            if layer.geometryType() == QgsWkbTypes.GeometryType.PolygonGeometry or closeline:
                 pts.append(ptStart)
 
             feat = QgsFeature(layer.fields())
-            if layer.geometryType() == QgsWkbTypes.LineGeometry:
+            if layer.geometryType() == QgsWkbTypes.GeometryType.LineGeometry:
                 feat.setGeometry(QgsGeometry.fromPolylineXY(pts))
             else:
                 feat.setGeometry(QgsGeometry.fromPolygonXY([pts]))

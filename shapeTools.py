@@ -147,7 +147,7 @@ class ShapeTools(object):
         self.createShapeButton = QToolButton()
         self.createShapeButton.setMenu(menu)
         self.createShapeButton.setDefaultAction(self.createDonutAction)
-        self.createShapeButton.setPopupMode(QToolButton.MenuButtonPopup)
+        self.createShapeButton.setPopupMode(QToolButton.ToolButtonPopupMode.MenuButtonPopup)
         self.createShapeButton.triggered.connect(self.createShapeTriggered)
         self.createShapeToolbar = self.toolbar.addWidget(self.createShapeButton)
         self.createShapeToolbar.setObjectName('stCreateShape')
@@ -174,7 +174,7 @@ class ShapeTools(object):
         self.createInteractiveButton = QToolButton()
         self.createInteractiveButton.setMenu(menu)
         self.createInteractiveButton.setDefaultAction(self.interactiveRingsAction)
-        self.createInteractiveButton.setPopupMode(QToolButton.MenuButtonPopup)
+        self.createInteractiveButton.setPopupMode(QToolButton.ToolButtonPopupMode.MenuButtonPopup)
         self.createInteractiveButton.triggered.connect(self.interactiveShapeTriggered)
         self.createInteractiveShapeToolbar = self.toolbar.addWidget(self.createInteractiveButton)
         self.createInteractiveShapeToolbar.setObjectName('stInteractiveShape')
@@ -213,7 +213,7 @@ class ShapeTools(object):
         self.simplifyButton = QToolButton()
         self.simplifyButton.setMenu(menu)
         self.simplifyButton.setDefaultAction(self.lineDecimateAction)
-        self.simplifyButton.setPopupMode(QToolButton.MenuButtonPopup)
+        self.simplifyButton.setPopupMode(QToolButton.ToolButtonPopupMode.MenuButtonPopup)
         self.simplifyButton.triggered.connect(self.simplifyTriggered)
         self.simplifyToolbar = self.toolbar.addWidget(self.simplifyButton)
         self.simplifyToolbar.setObjectName('stGeodesicSimplify')
@@ -282,7 +282,7 @@ class ShapeTools(object):
         self.transformationButton = QToolButton()
         self.transformationButton.setMenu(menu)
         self.transformationButton.setDefaultAction(self.transformationsAction)
-        self.transformationButton.setPopupMode(QToolButton.MenuButtonPopup)
+        self.transformationButton.setPopupMode(QToolButton.ToolButtonPopupMode.MenuButtonPopup)
         self.transformationButton.triggered.connect(self.toolButtonTriggered)
         self.tranformToolbar = self.toolbar.addWidget(self.transformationButton)
         self.tranformToolbar.setObjectName('stGeodesicTransformation')
@@ -548,14 +548,14 @@ class ShapeTools(object):
         self.rotate90CCWAction.setEnabled(False)
         layer = self.iface.activeLayer()
 
-        if not layer or not layer.isValid() or (layer.type() != QgsMapLayer.VectorLayer) or not layer.isEditable():
+        if not layer or not layer.isValid() or (layer.type() != QgsMapLayer.LayerType.VectorLayer) or not layer.isEditable():
             return
         wkbtype = layer.wkbType()
         geomtype = QgsWkbTypes.geometryType(wkbtype)
         self.lineDigitizeAction.setEnabled(True)
-        if geomtype == QgsWkbTypes.PointGeometry or geomtype == QgsWkbTypes.LineGeometry:
+        if geomtype == QgsWkbTypes.GeometryType.PointGeometry or geomtype == QgsWkbTypes.GeometryType.LineGeometry:
             self.digitizeAction.setEnabled(True)
-        if geomtype == QgsWkbTypes.LineGeometry or geomtype == QgsWkbTypes.PolygonGeometry:
+        if geomtype == QgsWkbTypes.GeometryType.LineGeometry or geomtype == QgsWkbTypes.GeometryType.PolygonGeometry:
             self.flipHorizontalAction.setEnabled(True)
             self.flipVerticalAction.setEnabled(True)
             self.rotate180Action.setEnabled(True)

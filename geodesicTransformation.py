@@ -63,7 +63,7 @@ class GeodesicTransformationsAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         file = os.path.dirname(__file__) + '/index.html'
         if not os.path.exists(file):
             return ''
-        return QUrl.fromLocalFile(file).toString(QUrl.FullyEncoded)
+        return QUrl.fromLocalFile(file).toString(QUrl.ComponentFormattingOption.FullyEncoded)
 
     def shortHelpString(self):
         file = os.path.dirname(__file__) + '/doc/GeodesicTransformationsAlgorithm.help'
@@ -74,7 +74,7 @@ class GeodesicTransformationsAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         return help
 
     def inputLayerTypes(self):
-        return [QgsProcessing.TypeVectorAnyGeometry]
+        return [QgsProcessing.SourceType.TypeVectorAnyGeometry]
 
     def outputWkbType(self, input_wkb_type):
         return input_wkb_type
@@ -83,56 +83,56 @@ class GeodesicTransformationsAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         param = QgsProcessingParameterNumber(
             self.PrmTransformRotation,
             tr('Rotation angle about the centroid'),
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=0,
             optional=True)
         param.setIsDynamic(True)
         param.setDynamicPropertyDefinition(QgsPropertyDefinition(
             self.PrmTransformRotation,
             tr('Rotation angle about the centroid'),
-            QgsPropertyDefinition.Double))
+            QgsPropertyDefinition.StandardPropertyTemplate.Double))
         param.setDynamicLayerParameterName('INPUT')
         self.addParameter(param)
 
         param = QgsProcessingParameterNumber(
             self.PrmTransformScale,
             tr('Scale factor about the centroid'),
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=1,
             optional=True)
         param.setIsDynamic(True)
         param.setDynamicPropertyDefinition(QgsPropertyDefinition(
             self.PrmTransformScale,
             tr('Scale factor about the centroid'),
-            QgsPropertyDefinition.Double))
+            QgsPropertyDefinition.StandardPropertyTemplate.Double))
         param.setDynamicLayerParameterName('INPUT')
         self.addParameter(param)
 
         param = QgsProcessingParameterNumber(
             self.PrmTransformDistance,
             tr('Translation distance'),
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=0,
             optional=True)
         param.setIsDynamic(True)
         param.setDynamicPropertyDefinition(QgsPropertyDefinition(
             self.PrmTransformDistance,
             tr('Translation distance'),
-            QgsPropertyDefinition.Double))
+            QgsPropertyDefinition.StandardPropertyTemplate.Double))
         param.setDynamicLayerParameterName('INPUT')
         self.addParameter(param)
 
         param = QgsProcessingParameterNumber(
             self.PrmTransformAzimuth,
             tr('Translation azimuth'),
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=0,
             optional=True)
         param.setIsDynamic(True)
         param.setDynamicPropertyDefinition(QgsPropertyDefinition(
             self.PrmTransformAzimuth,
             tr('Translation azimuth'),
-            QgsPropertyDefinition.Double))
+            QgsPropertyDefinition.StandardPropertyTemplate.Double))
         param.setDynamicLayerParameterName('INPUT')
         self.addParameter(param)
 

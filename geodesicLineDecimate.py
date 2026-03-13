@@ -47,7 +47,7 @@ class GeodesicLineDecimateAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterFeatureSource(
                 self.PrmInputLayer,
                 tr('Input line layer'),
-                [QgsProcessing.TypeVectorLine])
+                [QgsProcessing.SourceType.TypeVectorLine])
         )
         self.addParameter(
             QgsProcessingParameterBoolean(
@@ -59,7 +59,7 @@ class GeodesicLineDecimateAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 self.PrmMinDistance,
                 tr('Decimation minimum distance between vertices'),
-                QgsProcessingParameterNumber.Double,
+                QgsProcessingParameterNumber.Type.Double,
                 defaultValue=10)
         )
         self.addParameter(
@@ -87,7 +87,7 @@ class GeodesicLineDecimateAlgorithm(QgsProcessingAlgorithm):
         wkbtype = source.wkbType()
 
         num_bad = 0
-        if QgsWkbTypes.geometryType(wkbtype) != QgsWkbTypes.LineGeometry:
+        if QgsWkbTypes.geometryType(wkbtype) != QgsWkbTypes.GeometryType.LineGeometry:
             feedback.reportError(tr("Please select a valid line layer."))
             return({})
             
@@ -151,7 +151,7 @@ class GeodesicLineDecimateAlgorithm(QgsProcessingAlgorithm):
                                     # than the minimum so that the line can be preserved.
                                     pts.append(ptNext)
                     if len(pts) > 1: # There must be more than one point to make a valid line
-                        fgeom.addPoints(pts, QgsWkbTypes.LineGeometry)
+                        fgeom.addPoints(pts, QgsWkbTypes.GeometryType.LineGeometry)
                         is_valid = True
                 if is_valid: # Only save the feature if it is valid
                     fline.setAttributes(feature.attributes())
@@ -192,7 +192,7 @@ class GeodesicLineDecimateAlgorithm(QgsProcessingAlgorithm):
         file = os.path.dirname(__file__) + '/index.html'
         if not os.path.exists(file):
             return ''
-        return QUrl.fromLocalFile(file).toString(QUrl.FullyEncoded)
+        return QUrl.fromLocalFile(file).toString(QUrl.ComponentFormattingOption.FullyEncoded)
 
     def shortHelpString(self):
         file = os.path.dirname(__file__) + '/doc/GeodesicLineDecimateAlgorithm.help'

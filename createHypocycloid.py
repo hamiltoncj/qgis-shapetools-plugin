@@ -70,15 +70,15 @@ class CreateHypocycloidAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         file = os.path.dirname(__file__) + '/index.html'
         if not os.path.exists(file):
             return ''
-        return QUrl.fromLocalFile(file).toString(QUrl.FullyEncoded)
+        return QUrl.fromLocalFile(file).toString(QUrl.ComponentFormattingOption.FullyEncoded)
 
     def inputLayerTypes(self):
-        return [QgsProcessing.TypeVectorPoint]
+        return [QgsProcessing.SourceType.TypeVectorPoint]
 
     def outputWkbType(self, input_wkb_type):
         if self.shape_type == 0:
-            return (QgsWkbTypes.Polygon)
-        return (QgsWkbTypes.LineString)
+            return (QgsWkbTypes.Type.Polygon)
+        return (QgsWkbTypes.Type.LineString)
 
     def outputFields(self, input_fields):
         if self.export_geom:
@@ -104,7 +104,7 @@ class CreateHypocycloidAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         param = QgsProcessingParameterNumber(
             self.PrmCusps,
             tr('Number of cusps'),
-            QgsProcessingParameterNumber.Integer,
+            QgsProcessingParameterNumber.Type.Integer,
             defaultValue=4,
             minValue=3,
             optional=False)
@@ -112,28 +112,28 @@ class CreateHypocycloidAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         param.setDynamicPropertyDefinition(QgsPropertyDefinition(
             self.PrmCusps,
             tr('Number of cusps'),
-            QgsPropertyDefinition.Integer))
+            QgsPropertyDefinition.StandardPropertyTemplate.Integer))
         param.setDynamicLayerParameterName('INPUT')
         self.addParameter(param)
 
         param = QgsProcessingParameterNumber(
             self.PrmStartingAngle,
             tr('Starting angle'),
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=0,
             optional=False)
         param.setIsDynamic(True)
         param.setDynamicPropertyDefinition(QgsPropertyDefinition(
             self.PrmStartingAngle,
             tr('Starting angle'),
-            QgsPropertyDefinition.Double))
+            QgsPropertyDefinition.StandardPropertyTemplate.Double))
         param.setDynamicLayerParameterName('INPUT')
         self.addParameter(param)
 
         param = QgsProcessingParameterNumber(
             self.PrmRadius,
             tr('Radius'),
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=40.0,
             minValue=0,
             optional=False)
@@ -141,7 +141,7 @@ class CreateHypocycloidAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         param.setDynamicPropertyDefinition(QgsPropertyDefinition(
             self.PrmRadius,
             tr('Radius'),
-            QgsPropertyDefinition.Double))
+            QgsPropertyDefinition.StandardPropertyTemplate.Double))
         param.setDynamicLayerParameterName('INPUT')
         self.addParameter(param)
 
@@ -157,7 +157,7 @@ class CreateHypocycloidAlgorithm(QgsProcessingFeatureBasedAlgorithm):
             QgsProcessingParameterNumber(
                 self.PrmDrawingSegments,
                 tr('Number of drawing segments'),
-                QgsProcessingParameterNumber.Integer,
+                QgsProcessingParameterNumber.Type.Integer,
                 defaultValue=720,
                 minValue=4,
                 optional=True)

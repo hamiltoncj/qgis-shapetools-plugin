@@ -39,8 +39,8 @@ class AzDigitizerTool(QgsMapToolEmitPoint):
 
     def activate(self):
         """When activated set the cursor to a crosshair."""
-        self.canvas.setCursor(Qt.CrossCursor)
-        self.snapcolor = QgsSettings().value( "/qgis/digitizing/snap_color" , QColor( Qt.magenta ) )
+        self.canvas.setCursor(Qt.CursorShape.CrossCursor)
+        self.snapcolor = QgsSettings().value( "/qgis/digitizing/snap_color" , QColor( Qt.GlobalColor.magenta ) )
 
     def deactivate(self):
         self.removeVertexMarker()
@@ -54,7 +54,7 @@ class AzDigitizerTool(QgsMapToolEmitPoint):
             self.azDigitizerDialog = AzDigitizerWidget(self.iface, self.iface.mainWindow())
 
         layer = self.iface.activeLayer()
-        if layer is None or layer.wkbType() != QgsWkbTypes.Point:
+        if layer is None or layer.wkbType() != QgsWkbTypes.Type.Point:
             self.azDigitizerDialog.includeStartLabel.setEnabled(False)
             self.azDigitizerDialog.checkBox.setEnabled(False)
         else:
@@ -67,7 +67,7 @@ class AzDigitizerTool(QgsMapToolEmitPoint):
             self.azDigitizerDialog.setPoint(pt4326)
             self.azDigitizerDialog.show()
         except Exception:
-            self.iface.messageBar().pushMessage("", tr("Clicked location is invalid"), level=Qgis.Warning, duration=4)
+            self.iface.messageBar().pushMessage("", tr("Clicked location is invalid"), level=Qgis.MessageLevel.Warning, duration=4)
 
     def canvasMoveEvent(self, event):
         '''Show when the user mouses over a vector vertex in snapping mode.'''
@@ -81,7 +81,7 @@ class AzDigitizerTool(QgsMapToolEmitPoint):
                 self.vertex.setIconSize(12)
                 self.vertex.setPenWidth(2)
                 self.vertex.setColor(self.snapcolor)
-                self.vertex.setIconType(QgsVertexMarker.ICON_BOX)
+                self.vertex.setIconType(QgsVertexMarker.IconType.ICON_BOX)
             self.vertex.setCenter(match.point())
             return (match.point()) # Returns QgsPointXY
         else:
@@ -112,11 +112,11 @@ class AzDigitizerWidget(QDialog, FORM_CLASS):
             units = self.unitsComboBox.currentIndex()  # 0 km, 1 m, 2 nm, 3 miles, 4 yards, 5 ft, 6 inches, 7 cm
             start = self.checkBox.isChecked()
         except Exception:
-            self.iface.messageBar().pushMessage("", tr("Either distance or azimuth were invalid"), level=Qgis.Warning, duration=4)
+            self.iface.messageBar().pushMessage("", tr("Either distance or azimuth were invalid"), level=Qgis.MessageLevel.Warning, duration=4)
             return
         layer = self.iface.activeLayer()
         if layer is None:
-            self.iface.messageBar().pushMessage("", tr("No point or line layer selected"), level=Qgis.Warning, duration=4)
+            self.iface.messageBar().pushMessage("", tr("No point or line layer selected"), level=Qgis.MessageLevel.Warning, duration=4)
             return
 
         measureFactor = conversionToMeters(units)
@@ -125,7 +125,7 @@ class AzDigitizerWidget(QDialog, FORM_CLASS):
         pt = self.pt
         destCRS = layer.crs()
         transform = QgsCoordinateTransform(epsg4326, destCRS, QgsProject.instance())
-        if layer.wkbType() == QgsWkbTypes.Point:
+        if layer.wkbType() == QgsWkbTypes.Type.Point:
             g = geod.Direct(pt.y(), pt.x(), azimuth, distance, Geodesic.LATITUDE | Geodesic.LONGITUDE)
             if start:
                 ptStart = transform.transform(self.pt.x(), self.pt.y())
@@ -151,7 +151,7 @@ class AzDigitizerWidget(QDialog, FORM_CLASS):
                 ptc = transform.transform(g['lon2'], g['lat2'])
                 pts.append(ptc)
             feat = QgsFeature(layer.fields())
-            if layer.wkbType() == QgsWkbTypes.LineString:
+            if layer.wkbType() == QgsWkbTypes.Type.LineString:
                 feat.setGeometry(QgsGeometry.fromPolylineXY(pts))
             else:
                 feat.setGeometry(QgsGeometry.fromMultiPolylineXY([pts]))

@@ -40,7 +40,7 @@ class GeodesicFlipAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterFeatureSource(
                 self.PrmInputLayer,
                 tr('Input vector layer'),
-                [QgsProcessing.TypeVectorAnyGeometry])
+                [QgsProcessing.SourceType.TypeVectorAnyGeometry])
         )
         self.addParameter(
             QgsProcessingParameterEnum(
@@ -130,13 +130,13 @@ class GeodesicFlipAlgorithm(QgsProcessingAlgorithm):
         file = os.path.dirname(__file__) + '/index.html'
         if not os.path.exists(file):
             return ''
-        return QUrl.fromLocalFile(file).toString(QUrl.FullyEncoded)
+        return QUrl.fromLocalFile(file).toString(QUrl.ComponentFormattingOption.FullyEncoded)
 
     def createInstance(self):
         return GeodesicFlipAlgorithm()
 
 def flipLayer(iface, layer, mode):
-    if not layer or not layer.isValid() or (layer.type() != QgsMapLayer.VectorLayer) or not layer.isEditable():
+    if not layer or not layer.isValid() or (layer.type() != QgsMapLayer.LayerType.VectorLayer) or not layer.isEditable():
         return
     src_crs = layer.sourceCrs()
     geom_to_4326 = QgsCoordinateTransform(src_crs, epsg4326, QgsProject.instance())

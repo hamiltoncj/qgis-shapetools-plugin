@@ -66,13 +66,13 @@ class CreatePointsAlongLobAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         file = os.path.dirname(__file__) + '/index.html'
         if not os.path.exists(file):
             return ''
-        return QUrl.fromLocalFile(file).toString(QUrl.FullyEncoded)
+        return QUrl.fromLocalFile(file).toString(QUrl.ComponentFormattingOption.FullyEncoded)
 
     def inputLayerTypes(self):
-        return [QgsProcessing.TypeVectorPoint]
+        return [QgsProcessing.SourceType.TypeVectorPoint]
 
     def outputWkbType(self, input_wkb_type):
-        return (QgsWkbTypes.Point)
+        return (QgsWkbTypes.Type.Point)
 
     def outputFields(self, input_fields):
         names = input_fields.names()
@@ -90,21 +90,21 @@ class CreatePointsAlongLobAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         param = QgsProcessingParameterNumber(
             self.PrmAzimuth,
             tr('Azimuth/bearing'),
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=0,
             optional=False)
         param.setIsDynamic(True)
         param.setDynamicPropertyDefinition(QgsPropertyDefinition(
             self.PrmAzimuth,
             tr('Azimuth/bearing'),
-            QgsPropertyDefinition.Double))
+            QgsPropertyDefinition.StandardPropertyTemplate.Double))
         param.setDynamicLayerParameterName('INPUT')
         self.addParameter(param)
 
         param = QgsProcessingParameterNumber(
             self.PrmDistance,
             tr('Distance'),
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=1000.0,
             minValue=0,
             optional=False)
@@ -112,14 +112,14 @@ class CreatePointsAlongLobAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         param.setDynamicPropertyDefinition(QgsPropertyDefinition(
             self.PrmDistance,
             tr('Distance'),
-            QgsPropertyDefinition.Double))
+            QgsPropertyDefinition.StandardPropertyTemplate.Double))
         param.setDynamicLayerParameterName('INPUT')
         self.addParameter(param)
 
         param = QgsProcessingParameterNumber(
             self.PrmOffset,
             tr('Distance from origin to first point'),
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=0,
             minValue=0,
             optional=False)
@@ -127,14 +127,14 @@ class CreatePointsAlongLobAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         param.setDynamicPropertyDefinition(QgsPropertyDefinition(
             self.PrmOffset,
             tr('Distance from origin to first point'),
-            QgsPropertyDefinition.Double))
+            QgsPropertyDefinition.StandardPropertyTemplate.Double))
         param.setDynamicLayerParameterName('INPUT')
         self.addParameter(param)
 
         param = QgsProcessingParameterNumber(
             self.PrmDistanceBetweenPoints,
             tr('Distance between points'),
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=50.0,
             minValue=0,
             optional=False)
@@ -142,7 +142,7 @@ class CreatePointsAlongLobAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         param.setDynamicPropertyDefinition(QgsPropertyDefinition(
             self.PrmDistanceBetweenPoints,
             tr('Distance between points'),
-            QgsPropertyDefinition.Double))
+            QgsPropertyDefinition.StandardPropertyTemplate.Double))
         param.setDynamicLayerParameterName('INPUT')
         self.addParameter(param)
 

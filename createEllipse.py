@@ -111,15 +111,15 @@ class CreateEllipseAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         file = os.path.dirname(__file__) + '/index.html'
         if not os.path.exists(file):
             return ''
-        return QUrl.fromLocalFile(file).toString(QUrl.FullyEncoded)
+        return QUrl.fromLocalFile(file).toString(QUrl.ComponentFormattingOption.FullyEncoded)
 
     def inputLayerTypes(self):
-        return [QgsProcessing.TypeVectorPoint]
+        return [QgsProcessing.SourceType.TypeVectorPoint]
 
     def outputWkbType(self, input_wkb_type):
         if self.shape_type == 0:
-            return (QgsWkbTypes.Polygon)
-        return (QgsWkbTypes.LineString)
+            return (QgsWkbTypes.Type.Polygon)
+        return (QgsWkbTypes.Type.LineString)
 
     def outputFields(self, input_fields):
         if self.export_geom:
@@ -145,7 +145,7 @@ class CreateEllipseAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         param = QgsProcessingParameterNumber(
             self.PrmSemiMajorAxis,
             tr('Semi-major axis'),
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=40.0,
             minValue=0.00001,
             optional=False)
@@ -153,14 +153,14 @@ class CreateEllipseAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         param.setDynamicPropertyDefinition(QgsPropertyDefinition(
             self.PrmSemiMajorAxis,
             tr('Semi-major axis'),
-            QgsPropertyDefinition.Double))
+            QgsPropertyDefinition.StandardPropertyTemplate.Double))
         param.setDynamicLayerParameterName('INPUT')
         self.addParameter(param)
 
         param = QgsProcessingParameterNumber(
             self.PrmSemiMinorAxis,
             tr('Semi-minor axis'),
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=20.0,
             minValue=0.00001,
             optional=False)
@@ -168,14 +168,14 @@ class CreateEllipseAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         param.setDynamicPropertyDefinition(QgsPropertyDefinition(
             self.PrmSemiMinorAxis,
             tr('Semi-minor axis'),
-            QgsPropertyDefinition.Double))
+            QgsPropertyDefinition.StandardPropertyTemplate.Double))
         param.setDynamicLayerParameterName('INPUT')
         self.addParameter(param)
 
         param = QgsProcessingParameterNumber(
             self.PrmOrientation,
             tr('Orientation of axis'),
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=0,
             minValue=-360,
             maxValue=360,
@@ -184,7 +184,7 @@ class CreateEllipseAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         param.setDynamicPropertyDefinition(QgsPropertyDefinition(
             self.PrmOrientation,
             tr('Orientation of axis'),
-            QgsPropertyDefinition.Double))
+            QgsPropertyDefinition.StandardPropertyTemplate.Double))
         param.setDynamicLayerParameterName('INPUT')
         self.addParameter(param)
 
@@ -200,7 +200,7 @@ class CreateEllipseAlgorithm(QgsProcessingFeatureBasedAlgorithm):
             QgsProcessingParameterNumber(
                 self.PrmDrawingSegments,
                 tr('Number of drawing segments (approximate)'),
-                QgsProcessingParameterNumber.Integer,
+                QgsProcessingParameterNumber.Type.Integer,
                 defaultValue=64,
                 minValue=8,
                 optional=True)

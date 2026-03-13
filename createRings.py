@@ -67,7 +67,7 @@ class ConcentricRingsAlgorithm(QgsProcessingAlgorithm):
         file = os.path.dirname(__file__) + '/index.html'
         if not os.path.exists(file):
             return ''
-        return QUrl.fromLocalFile(file).toString(QUrl.FullyEncoded)
+        return QUrl.fromLocalFile(file).toString(QUrl.ComponentFormattingOption.FullyEncoded)
 
     def supportInPlaceEdit(self, layer):
         return False
@@ -77,12 +77,12 @@ class ConcentricRingsAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterFeatureSource(
                 'INPUT',
                 tr('Input point layer'),
-                [QgsProcessing.TypeVectorPoint])
+                [QgsProcessing.SourceType.TypeVectorPoint])
         )
         param = QgsProcessingParameterNumber(
             self.PrmStartingRadius,
             tr('Radius of first ring. If 0, distance between rings is used'),
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=10.0,
             minValue=0,
             optional=False)
@@ -90,14 +90,14 @@ class ConcentricRingsAlgorithm(QgsProcessingAlgorithm):
         param.setDynamicPropertyDefinition(QgsPropertyDefinition(
             self.PrmStartingRadius,
             tr('Radius of first ring. If 0, distance between rings is used'),
-            QgsPropertyDefinition.Double))
+            QgsPropertyDefinition.StandardPropertyTemplate.Double))
         param.setDynamicLayerParameterName('INPUT')
         self.addParameter(param)
 
         param = QgsProcessingParameterNumber(
             self.PrmDistance,
             tr('Distance between rings'),
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=10.0,
             minValue=0,
             optional=False)
@@ -105,14 +105,14 @@ class ConcentricRingsAlgorithm(QgsProcessingAlgorithm):
         param.setDynamicPropertyDefinition(QgsPropertyDefinition(
             self.PrmDistance,
             tr('Distance between rings'),
-            QgsPropertyDefinition.Double))
+            QgsPropertyDefinition.StandardPropertyTemplate.Double))
         param.setDynamicLayerParameterName('INPUT')
         self.addParameter(param)
 
         param = QgsProcessingParameterNumber(
             self.PrmRingCount,
             tr('Number of rings'),
-            QgsProcessingParameterNumber.Integer,
+            QgsProcessingParameterNumber.Type.Integer,
             defaultValue=4.0,
             minValue=0,
             optional=False)
@@ -120,7 +120,7 @@ class ConcentricRingsAlgorithm(QgsProcessingAlgorithm):
         param.setDynamicPropertyDefinition(QgsPropertyDefinition(
             self.PrmRingCount,
             tr('Number of rings'),
-            QgsPropertyDefinition.Integer))
+            QgsPropertyDefinition.StandardPropertyTemplate.Integer))
         param.setDynamicLayerParameterName('INPUT')
         self.addParameter(param)
 
@@ -136,7 +136,7 @@ class ConcentricRingsAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 self.PrmDrawingSegments,
                 tr('Number of drawing segments'),
-                QgsProcessingParameterNumber.Integer,
+                QgsProcessingParameterNumber.Type.Integer,
                 defaultValue=90,
                 minValue=4,
                 optional=True)
@@ -145,7 +145,7 @@ class ConcentricRingsAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 self.PrmRadials,
                 tr('Number of radial lines'),
-                QgsProcessingParameterNumber.Integer,
+                QgsProcessingParameterNumber.Type.Integer,
                 defaultValue=0,
                 minValue=0,
                 optional=True)
@@ -154,7 +154,7 @@ class ConcentricRingsAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 self.PrmStartingRadialAngle,
                 tr('Starting radial line angle (degrees)'),
-                QgsProcessingParameterNumber.Double,
+                QgsProcessingParameterNumber.Type.Double,
                 defaultValue=0,
                 maxValue=360,
                 minValue=-360,
@@ -216,7 +216,7 @@ class ConcentricRingsAlgorithm(QgsProcessingAlgorithm):
 
         (sink, dest_id) = self.parameterAsSink(
             parameters, 'OUTPUT',
-            context, source.fields(), QgsWkbTypes.MultiLineString, source.sourceCrs())
+            context, source.fields(), QgsWkbTypes.Type.MultiLineString, source.sourceCrs())
 
         total = 100.0 / source.featureCount() if source.featureCount() else 0
         iterator = source.getFeatures()

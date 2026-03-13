@@ -29,17 +29,17 @@ def conversionToMeters(units):
     elif units == 1:  # Meters
         measureFactor = 1.0
     elif units == 2:  # Centimeters
-        measureFactor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceCentimeters, QgsUnitTypes.DistanceMeters)
+        measureFactor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceCentimeters, QgsUnitTypes.DistanceUnit.DistanceMeters)
     elif units == 3:  # Miles
-        measureFactor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceMiles, QgsUnitTypes.DistanceMeters)
+        measureFactor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceMiles, QgsUnitTypes.DistanceUnit.DistanceMeters)
     elif units == 4:  # Yards
-        measureFactor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceYards, QgsUnitTypes.DistanceMeters)
+        measureFactor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceYards, QgsUnitTypes.DistanceUnit.DistanceMeters)
     elif units == 5:  # Feet
-        measureFactor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceFeet, QgsUnitTypes.DistanceMeters)
+        measureFactor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceFeet, QgsUnitTypes.DistanceUnit.DistanceMeters)
     elif units == 6:  # Inches
-        measureFactor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceFeet, QgsUnitTypes.DistanceMeters) / 12.0
+        measureFactor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceFeet, QgsUnitTypes.DistanceUnit.DistanceMeters) / 12.0
     elif units == 7:  # Nautical Miles
-        measureFactor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceNauticalMiles, QgsUnitTypes.DistanceMeters)
+        measureFactor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceNauticalMiles, QgsUnitTypes.DistanceUnit.DistanceMeters)
     return measureFactor
 
 def conversionFromMeters(units):
@@ -48,17 +48,17 @@ def conversionFromMeters(units):
     elif units == 1:  # Meters
         measureFactor = 1.0
     elif units == 2:  # Centimeters
-        measureFactor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceMeters, QgsUnitTypes.DistanceCentimeters)
+        measureFactor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceMeters, QgsUnitTypes.DistanceUnit.DistanceCentimeters)
     elif units == 3:  # Miles
-        measureFactor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceMeters, QgsUnitTypes.DistanceMiles)
+        measureFactor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceMeters, QgsUnitTypes.DistanceUnit.DistanceMiles)
     elif units == 4:  # Yards
-        measureFactor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceMeters, QgsUnitTypes.DistanceYards)
+        measureFactor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceMeters, QgsUnitTypes.DistanceUnit.DistanceYards)
     elif units == 5:  # Feet
-        measureFactor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceMeters, QgsUnitTypes.DistanceFeet)
+        measureFactor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceMeters, QgsUnitTypes.DistanceUnit.DistanceFeet)
     elif units == 6:  # Inches
-        measureFactor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceMeters, QgsUnitTypes.DistanceFeet) * 12.0
+        measureFactor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceMeters, QgsUnitTypes.DistanceUnit.DistanceFeet) * 12.0
     elif units == 7:  # Nautical Miles
-        measureFactor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceMeters, QgsUnitTypes.DistanceNauticalMiles)
+        measureFactor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceMeters, QgsUnitTypes.DistanceUnit.DistanceNauticalMiles)
     return measureFactor
 
 def hasIdlCrossing(pts):

@@ -41,10 +41,10 @@ class GeodesicMeasureTool(QgsMapTool):
 
     def activate(self):
         '''When activated set the cursor to a crosshair.'''
-        self.canvas.setCursor(Qt.CrossCursor)
+        self.canvas.setCursor(Qt.CursorShape.CrossCursor)
         self.measureDialog.initGeodLabel()
         self.measureDialog.show()
-        self.snapcolor = QgsSettings().value( "/qgis/digitizing/snap_color" , QColor( Qt.magenta ) )
+        self.snapcolor = QgsSettings().value( "/qgis/digitizing/snap_color" , QColor( Qt.GlobalColor.magenta ) )
 
     def closeDialog(self):
         '''Close the geodesic measure tool dialog box.'''
@@ -106,7 +106,7 @@ class GeodesicMeasureTool(QgsMapTool):
                 self.vertex.setIconSize(12)
                 self.vertex.setPenWidth(2)
                 self.vertex.setColor(self.snapcolor)
-                self.vertex.setIconType(QgsVertexMarker.ICON_BOX)
+                self.vertex.setIconType(QgsVertexMarker.IconType.ICON_BOX)
             self.vertex.setCenter(match.point())
             return (match.point()) # Returns QgsPointXY
         else:
@@ -168,13 +168,13 @@ class GeodesicMeasureDialog(QDialog, FORM_CLASS):
         self.unitsChanged()
         self.currentDistance = 0.0
 
-        self.pointRb = QgsRubberBand(self.canvas, QgsWkbTypes.PointGeometry)
+        self.pointRb = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.PointGeometry)
         self.pointRb.setColor(settings.rubberBandColor)
         self.pointRb.setIconSize(10)
-        self.lineRb = QgsRubberBand(self.canvas, QgsWkbTypes.LineGeometry)
+        self.lineRb = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.LineGeometry)
         self.lineRb.setColor(settings.rubberBandColor)
         self.lineRb.setWidth(3)
-        self.tempRb = QgsRubberBand(self.canvas, QgsWkbTypes.LineGeometry)
+        self.tempRb = QgsRubberBand(self.canvas, QgsWkbTypes.GeometryType.LineGeometry)
         self.tempRb.setColor(settings.rubberBandColor)
         self.tempRb.setWidth(3)
 
@@ -223,7 +223,7 @@ class GeodesicMeasureDialog(QDialog, FORM_CLASS):
         index = len(self.capturedPoints)
         if index <= 0:
             return
-        if key == Qt.Key_Escape:
+        if key == Qt.Key.Key_Escape:
             self.endRubberband()
         if self.motionReady():
             if self.lastMotionPt is None:
@@ -236,19 +236,19 @@ class GeodesicMeasureDialog(QDialog, FORM_CLASS):
 
         distance = self.unitDistance(distance)
         clipboard = QApplication.clipboard()
-        if key == Qt.Key_1 or key == Qt.Key_F:
+        if key == Qt.Key.Key_1 or key == Qt.Key.Key_F:
             s = '{:.{prec}f}'.format(startAngle, prec=settings.measureSignificantDigits)
             clipboard.setText(s)
-            self.iface.messageBar().pushMessage("", "Heading to {} copied to the clipboard".format(s), level=Qgis.Info, duration=3)
-        elif key == Qt.Key_2 or key == Qt.Key_T:
+            self.iface.messageBar().pushMessage("", "Heading to {} copied to the clipboard".format(s), level=Qgis.MessageLevel.Info, duration=3)
+        elif key == Qt.Key.Key_2 or key == Qt.Key.Key_T:
             s = '{:.{prec}f}'.format(endAngle, prec=settings.measureSignificantDigits)
             clipboard.setText(s)
-            self.iface.messageBar().pushMessage("", "Heading from {} copied to the clipboard".format(s), level=Qgis.Info, duration=3)
-        elif key == Qt.Key_3 or key == Qt.Key_D:
+            self.iface.messageBar().pushMessage("", "Heading from {} copied to the clipboard".format(s), level=Qgis.MessageLevel.Info, duration=3)
+        elif key == Qt.Key.Key_3 or key == Qt.Key.Key_D:
             s = '{:.{prec}f}'.format(distance, prec=settings.measureSignificantDigits)
             clipboard.setText(s)
-            self.iface.messageBar().pushMessage("", "Distance {} copied to the clipboard".format(s), level=Qgis.Info, duration=3)
-        elif key == Qt.Key_4 or key == Qt.Key_A:
+            self.iface.messageBar().pushMessage("", "Distance {} copied to the clipboard".format(s), level=Qgis.MessageLevel.Info, duration=3)
+        elif key == Qt.Key.Key_4 or key == Qt.Key.Key_A:
             total = 0.0
             num = len(self.capturedPoints)
             for i in range(1, num):
@@ -260,7 +260,7 @@ class GeodesicMeasureDialog(QDialog, FORM_CLASS):
                 total += distance
             s = '{:.{prec}f}'.format(total, prec=settings.measureSignificantDigits)
             clipboard.setText(s)
-            self.iface.messageBar().pushMessage("", "Total distance {} copied to the clipboard".format(s), level=Qgis.Info, duration=3)
+            self.iface.messageBar().pushMessage("", "Total distance {} copied to the clipboard".format(s), level=Qgis.MessageLevel.Info, duration=3)
         else:
             return
 
@@ -326,7 +326,7 @@ class GeodesicMeasureDialog(QDialog, FORM_CLASS):
         if self.motionReady():
             if self.lastMotionPt is not None:
                 self.lastMotionPt = None
-                self.tempRb.reset(QgsWkbTypes.LineGeometry)
+                self.tempRb.reset(QgsWkbTypes.GeometryType.LineGeometry)
                 self.tableWidget.setRowCount(index - 1)
         self.stop()
         self.currentDistance = 0
@@ -425,7 +425,7 @@ class GeodesicMeasureDialog(QDialog, FORM_CLASS):
         label = QgsPalLayerSettings()
         label.fieldName = 'label'
         try:
-            label.placement = QgsPalLayerSettings.Line
+            label.placement = QgsPalLayerSettings.Placement.Line
         except Exception:
             label.placement = QgsPalLayerSettings.AboveLine
         format = label.format()
@@ -446,29 +446,29 @@ class GeodesicMeasureDialog(QDialog, FORM_CLASS):
         if position > self.tableWidget.rowCount():
             self.tableWidget.insertRow(position - 1)
         item = QTableWidgetItem('{:.4f}'.format(self.unitDistance(distance)))
-        item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
+        item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
         if self.compassResolution:
             self.tableWidget.setItem(position - 1, 4, item)
         else:
             self.tableWidget.setItem(position - 1, 2, item)
 
         item = QTableWidgetItem('{:.4f}'.format(startAngle))
-        item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
+        item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
         self.tableWidget.setItem(position - 1, 0, item)
         if self.compassResolution:
             item = QTableWidgetItem(self.compass(startAngle))
-            item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
+            item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
             self.tableWidget.setItem(position - 1, 1, item)
 
         item = QTableWidgetItem('{:.4f}'.format(endAngle))
-        item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
+        item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
         if self.compassResolution:
             self.tableWidget.setItem(position - 1, 2, item)
         else:
             self.tableWidget.setItem(position - 1, 1, item)
         if self.compassResolution:
             item = QTableWidgetItem(self.compass(endAngle))
-            item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
+            item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
             self.tableWidget.setItem(position - 1, 3, item)
 
     def formatTotal(self):
@@ -495,9 +495,9 @@ class GeodesicMeasureDialog(QDialog, FORM_CLASS):
         self.activeMeasuring = True
         self.currentDistance = 0.0
         self.distanceLineEdit.setText('')
-        self.pointRb.reset(QgsWkbTypes.PointGeometry)
-        self.lineRb.reset(QgsWkbTypes.LineGeometry)
-        self.tempRb.reset(QgsWkbTypes.LineGeometry)
+        self.pointRb.reset(QgsWkbTypes.GeometryType.PointGeometry)
+        self.lineRb.reset(QgsWkbTypes.GeometryType.LineGeometry)
+        self.tempRb.reset(QgsWkbTypes.GeometryType.LineGeometry)
         self.saveToLayerButton.setEnabled(False)
         self.updateRBColor()
 
@@ -508,17 +508,17 @@ class GeodesicMeasureDialog(QDialog, FORM_CLASS):
         elif units == 1:  # meters
             return distance
         elif units == 2:  # centimeters
-            return distance * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceMeters, QgsUnitTypes.DistanceCentimeters)
+            return distance * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceMeters, QgsUnitTypes.DistanceUnit.DistanceCentimeters)
         elif units == 3:  # miles
-            return distance * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceMeters, QgsUnitTypes.DistanceMiles)
+            return distance * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceMeters, QgsUnitTypes.DistanceUnit.DistanceMiles)
         elif units == 4:  # yards
-            return distance * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceMeters, QgsUnitTypes.DistanceYards)
+            return distance * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceMeters, QgsUnitTypes.DistanceUnit.DistanceYards)
         elif units == 5:  # feet
-            return distance * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceMeters, QgsUnitTypes.DistanceFeet)
+            return distance * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceMeters, QgsUnitTypes.DistanceUnit.DistanceFeet)
         elif units == 6:  # inches
-            return distance * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceMeters, QgsUnitTypes.DistanceFeet) * 12
+            return distance * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceMeters, QgsUnitTypes.DistanceUnit.DistanceFeet) * 12
         elif units == 7:  # nautical miles
-            return distance * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceMeters, QgsUnitTypes.DistanceNauticalMiles)
+            return distance * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceMeters, QgsUnitTypes.DistanceUnit.DistanceNauticalMiles)
 
     def unitDesignator(self):
         units = self.unitsComboBox.currentIndex()
@@ -609,7 +609,7 @@ class AddMeasurePointWidget(QDialog, FORM_CLASS2):
                         raise ValueError('Invalid Coordinates')
 
                     geom = fet[0].geometry()
-                    if geom.isEmpty() or (geom.wkbType() != QgsWkbTypes.Point):
+                    if geom.isEmpty() or (geom.wkbType() != QgsWkbTypes.Type.Point):
                         raise ValueError('Invalid GeoJSON Geometry')
                     pt = geom.asPoint()
                     lat = pt.y()
@@ -646,7 +646,7 @@ class AddMeasurePointWidget(QDialog, FORM_CLASS2):
                     srcCrs = QgsCoordinateReferenceSystem(self.inputCustomCRS)
         except Exception:
             # traceback.print_exc()
-            self.iface.messageBar().pushMessage("", "Invalid Coordinate", level=Qgis.Warning, duration=2)
+            self.iface.messageBar().pushMessage("", "Invalid Coordinate", level=Qgis.MessageLevel.Warning, duration=2)
             return
         self.lineEdit.clear()
         if srcCrs != epsg4326:

@@ -73,7 +73,7 @@ class InteractiveConcentricRingsAlgorithm(QgsProcessingAlgorithm):
         file = os.path.dirname(__file__) + '/index.html'
         if not os.path.exists(file):
             return ''
-        return QUrl.fromLocalFile(file).toString(QUrl.FullyEncoded)
+        return QUrl.fromLocalFile(file).toString(QUrl.ComponentFormattingOption.FullyEncoded)
 
     def supportInPlaceEdit(self, layer):
         return True
@@ -89,7 +89,7 @@ class InteractiveConcentricRingsAlgorithm(QgsProcessingAlgorithm):
         param = QgsProcessingParameterNumber(
             self.PrmStartingRadius,
             tr('Starting ring radius'),
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=10,
             minValue=0,
             optional=False)
@@ -98,7 +98,7 @@ class InteractiveConcentricRingsAlgorithm(QgsProcessingAlgorithm):
         param = QgsProcessingParameterNumber(
             self.PrmDistance,
             tr('Distance between rings'),
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=10.0,
             minValue=0,
             optional=False)
@@ -108,7 +108,7 @@ class InteractiveConcentricRingsAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 self.PrmRingCount,
                 tr('Number of rings'),
-                QgsProcessingParameterNumber.Integer,
+                QgsProcessingParameterNumber.Type.Integer,
                 defaultValue=2,
                 minValue=1,
                 optional=True)
@@ -132,7 +132,7 @@ class InteractiveConcentricRingsAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 self.PrmDrawingSegments,
                 tr('Number of drawing segments'),
-                QgsProcessingParameterNumber.Integer,
+                QgsProcessingParameterNumber.Type.Integer,
                 defaultValue=360,
                 minValue=4,
                 optional=True)
@@ -142,7 +142,7 @@ class InteractiveConcentricRingsAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 self.PrmRadials,
                 tr('Number of radial lines'),
-                QgsProcessingParameterNumber.Integer,
+                QgsProcessingParameterNumber.Type.Integer,
                 defaultValue=0,
                 minValue=0,
                 optional=True)
@@ -151,7 +151,7 @@ class InteractiveConcentricRingsAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 self.PrmStartingRadialAngle,
                 tr('Starting radial line angle (degrees)'),
-                QgsProcessingParameterNumber.Double,
+                QgsProcessingParameterNumber.Type.Double,
                 defaultValue=0,
                 maxValue=360,
                 minValue=-360,
@@ -194,14 +194,14 @@ class InteractiveConcentricRingsAlgorithm(QgsProcessingAlgorithm):
         fields.append(QgsField('unit', QVariant.String))
         (sink, dest_id) = self.parameterAsSink(
             parameters, self.PrmCircleOutput,
-            context, fields, QgsWkbTypes.LineString, epsg4326)
+            context, fields, QgsWkbTypes.Type.LineString, epsg4326)
         if radial_cnt:
             fields = QgsFields()
             fields.append(QgsField('id', QVariant.Int))
             fields.append(QgsField('angle', QVariant.Double))
             (sink_radials, dest_id_radials) = self.parameterAsSink(
                 parameters, self.PrmRadialLineOutput,
-                context, fields, QgsWkbTypes.LineString, epsg4326)
+                context, fields, QgsWkbTypes.Type.LineString, epsg4326)
             
         if ring_distance_str:
             try:

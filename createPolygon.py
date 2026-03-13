@@ -69,15 +69,15 @@ class CreatePolygonAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         file = os.path.dirname(__file__) + '/index.html'
         if not os.path.exists(file):
             return ''
-        return QUrl.fromLocalFile(file).toString(QUrl.FullyEncoded)
+        return QUrl.fromLocalFile(file).toString(QUrl.ComponentFormattingOption.FullyEncoded)
 
     def inputLayerTypes(self):
-        return [QgsProcessing.TypeVectorPoint]
+        return [QgsProcessing.SourceType.TypeVectorPoint]
 
     def outputWkbType(self, input_wkb_type):
         if self.shape_type == 0:
-            return (QgsWkbTypes.Polygon)
-        return (QgsWkbTypes.LineString)
+            return (QgsWkbTypes.Type.Polygon)
+        return (QgsWkbTypes.Type.LineString)
 
     def  supportInPlaceEdit(self, layer):
         return False
@@ -103,7 +103,7 @@ class CreatePolygonAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         param = QgsProcessingParameterNumber(
             self.PrmNumberOfSides,
             tr('Number of sides'),
-            QgsProcessingParameterNumber.Integer,
+            QgsProcessingParameterNumber.Type.Integer,
             defaultValue=3,
             minValue=3,
             optional=False)
@@ -111,28 +111,28 @@ class CreatePolygonAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         param.setDynamicPropertyDefinition(QgsPropertyDefinition(
             self.PrmNumberOfSides,
             tr('Number of sides'),
-            QgsPropertyDefinition.Integer))
+            QgsPropertyDefinition.StandardPropertyTemplate.Integer))
         param.setDynamicLayerParameterName('INPUT')
         self.addParameter(param)
 
         param = QgsProcessingParameterNumber(
             self.PrmStartingAngle,
             tr('Starting angle'),
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=0,
             optional=False)
         param.setIsDynamic(True)
         param.setDynamicPropertyDefinition(QgsPropertyDefinition(
             self.PrmStartingAngle,
             tr('Starting angle'),
-            QgsPropertyDefinition.Double))
+            QgsPropertyDefinition.StandardPropertyTemplate.Double))
         param.setDynamicLayerParameterName('INPUT')
         self.addParameter(param)
 
         param = QgsProcessingParameterNumber(
             self.PrmRadius,
             tr('Radius'),
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=40.0,
             minValue=0,
             optional=False)
@@ -140,7 +140,7 @@ class CreatePolygonAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         param.setDynamicPropertyDefinition(QgsPropertyDefinition(
             self.PrmRadius,
             tr('Radius'),
-            QgsPropertyDefinition.Double))
+            QgsPropertyDefinition.StandardPropertyTemplate.Double))
         param.setDynamicLayerParameterName('INPUT')
         self.addParameter(param)
 

@@ -49,7 +49,7 @@ class GeodesicDensifyAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterFeatureSource(
                 self.PrmInputLayer,
                 tr('Line or polygon layer'),
-                [QgsProcessing.TypeVectorLine, QgsProcessing.TypeVectorPolygon])
+                [QgsProcessing.SourceType.TypeVectorLine, QgsProcessing.SourceType.TypeVectorPolygon])
         )
         self.addParameter(
             QgsProcessingParameterBoolean(
@@ -62,7 +62,7 @@ class GeodesicDensifyAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 self.PrmMaxSegmentLength,
                 tr('Maximum line segment length (in kilometers)'),
-                QgsProcessingParameterNumber.Double,
+                QgsProcessingParameterNumber.Type.Double,
                 defaultValue=settings.maxSegLength,
                 minValue=0.001,
                 optional=True)
@@ -81,9 +81,9 @@ class GeodesicDensifyAlgorithm(QgsProcessingAlgorithm):
         wkbtype = source.wkbType()
         geomtype = QgsWkbTypes.geometryType(wkbtype)
 
-        if geomtype == QgsWkbTypes.LineGeometry:
-            outputType = QgsWkbTypes.LineString if (
-                QgsWkbTypes.isSingleType(wkbtype) or discardVertices) else QgsWkbTypes.MultiLineString
+        if geomtype == QgsWkbTypes.GeometryType.LineGeometry:
+            outputType = QgsWkbTypes.Type.LineString if (
+                QgsWkbTypes.isSingleType(wkbtype) or discardVertices) else QgsWkbTypes.Type.MultiLineString
 
             (sink, dest_id) = self.parameterAsSink(
                 parameters, self.PrmOutputLayer,
@@ -91,7 +91,7 @@ class GeodesicDensifyAlgorithm(QgsProcessingAlgorithm):
 
             num_bad = processLine(source, sink, feedback, discardVertices, maxseglen)
         else:
-            outputType = QgsWkbTypes.Polygon if QgsWkbTypes.isSingleType(wkbtype) else QgsWkbTypes.MultiPolygon
+            outputType = QgsWkbTypes.Type.Polygon if QgsWkbTypes.isSingleType(wkbtype) else QgsWkbTypes.Type.MultiPolygon
 
             (sink, dest_id) = self.parameterAsSink(
                 parameters, self.PrmOutputLayer,
@@ -123,7 +123,7 @@ class GeodesicDensifyAlgorithm(QgsProcessingAlgorithm):
         file = os.path.dirname(__file__) + '/index.html'
         if not os.path.exists(file):
             return ''
-        return QUrl.fromLocalFile(file).toString(QUrl.FullyEncoded)
+        return QUrl.fromLocalFile(file).toString(QUrl.ComponentFormattingOption.FullyEncoded)
 
     def shortHelpString(self):
         file = os.path.dirname(__file__) + '/doc/GeodesicDensifyAlgorithm.help'

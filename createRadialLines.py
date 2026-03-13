@@ -67,13 +67,13 @@ class CreateRadialLinesAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         file = os.path.dirname(__file__) + '/index.html'
         if not os.path.exists(file):
             return ''
-        return QUrl.fromLocalFile(file).toString(QUrl.FullyEncoded)
+        return QUrl.fromLocalFile(file).toString(QUrl.ComponentFormattingOption.FullyEncoded)
 
     def inputLayerTypes(self):
-        return [QgsProcessing.TypeVectorPoint]
+        return [QgsProcessing.SourceType.TypeVectorPoint]
 
     def outputWkbType(self, input_wkb_type):
-        return (QgsWkbTypes.MultiLineString)
+        return (QgsWkbTypes.Type.MultiLineString)
 
     def outputFields(self, input_fields):
         if self.export_geom:
@@ -90,7 +90,7 @@ class CreateRadialLinesAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         param = QgsProcessingParameterNumber(
             self.PrmNumberOfLines,
             tr('Number of radial lines'),
-            QgsProcessingParameterNumber.Integer,
+            QgsProcessingParameterNumber.Type.Integer,
             defaultValue=5,
             minValue=1,
             optional=False)
@@ -98,14 +98,14 @@ class CreateRadialLinesAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         param.setDynamicPropertyDefinition(QgsPropertyDefinition(
             self.PrmNumberOfLines,
             tr('Number of radial lines'),
-            QgsPropertyDefinition.Integer))
+            QgsPropertyDefinition.StandardPropertyTemplate.Integer))
         param.setDynamicLayerParameterName('INPUT')
         self.addParameter(param)
 
         param = QgsProcessingParameterNumber(
             self.PrmOuterRadius,
             tr('Outer radius'),
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=20.0,
             minValue=0,
             optional=False)
@@ -113,14 +113,14 @@ class CreateRadialLinesAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         param.setDynamicPropertyDefinition(QgsPropertyDefinition(
             self.PrmOuterRadius,
             tr('Outer radius'),
-            QgsPropertyDefinition.Double))
+            QgsPropertyDefinition.StandardPropertyTemplate.Double))
         param.setDynamicLayerParameterName('INPUT')
         self.addParameter(param)
 
         param = QgsProcessingParameterNumber(
             self.PrmInnerRadius,
             tr('Inner radius'),
-            QgsProcessingParameterNumber.Double,
+            QgsProcessingParameterNumber.Type.Double,
             defaultValue=10.0,
             minValue=0,
             optional=False)
@@ -128,7 +128,7 @@ class CreateRadialLinesAlgorithm(QgsProcessingFeatureBasedAlgorithm):
         param.setDynamicPropertyDefinition(QgsPropertyDefinition(
             self.PrmInnerRadius,
             tr('Inner radius'),
-            QgsPropertyDefinition.Double))
+            QgsPropertyDefinition.StandardPropertyTemplate.Double))
         param.setDynamicLayerParameterName('INPUT')
         self.addParameter(param)
 

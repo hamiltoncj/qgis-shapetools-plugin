@@ -117,15 +117,15 @@ def st_from_meters(values, feature, parent):
         elif unit == 'km':
             return(len * 0.001)
         elif unit == 'in':
-            return (len * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceMeters, QgsUnitTypes.DistanceFeet) * 12.0)
+            return (len * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceMeters, QgsUnitTypes.DistanceUnit.DistanceFeet) * 12.0)
         elif unit == 'ft':
-            return(len * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceMeters, QgsUnitTypes.DistanceFeet))
+            return(len * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceMeters, QgsUnitTypes.DistanceUnit.DistanceFeet))
         elif unit == 'yard':
-            return(len * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceMeters, QgsUnitTypes.DistanceYards))
+            return(len * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceMeters, QgsUnitTypes.DistanceUnit.DistanceYards))
         elif unit == 'mi':
-            return(len * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceMeters, QgsUnitTypes.DistanceMiles))
+            return(len * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceMeters, QgsUnitTypes.DistanceUnit.DistanceMiles))
         elif unit == 'nm':
-            return(len * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceMeters, QgsUnitTypes.DistanceNauticalMiles))
+            return(len * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceMeters, QgsUnitTypes.DistanceUnit.DistanceNauticalMiles))
         else:
             parent.setEvalErrorString("Error: invalid unit")
         return
@@ -171,15 +171,15 @@ def st_to_meters(values, feature, parent):
         elif unit == 'km':
             return(len * 1000)
         elif unit == 'in':
-            return (len * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceFeet, QgsUnitTypes.DistanceMeters) / 12.0)
+            return (len * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceFeet, QgsUnitTypes.DistanceUnit.DistanceMeters) / 12.0)
         elif unit == 'ft':
-            return(len * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceFeet, QgsUnitTypes.DistanceMeters))
+            return(len * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceFeet, QgsUnitTypes.DistanceUnit.DistanceMeters))
         elif unit == 'yard':
-            return(len * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceYards, QgsUnitTypes.DistanceMeters))
+            return(len * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceYards, QgsUnitTypes.DistanceUnit.DistanceMeters))
         elif unit == 'mi':
-            return(len * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceMiles, QgsUnitTypes.DistanceMeters))
+            return(len * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceMiles, QgsUnitTypes.DistanceUnit.DistanceMeters))
         elif unit == 'nm':
-            return(len * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceNauticalMiles, QgsUnitTypes.DistanceMeters))
+            return(len * QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceNauticalMiles, QgsUnitTypes.DistanceUnit.DistanceMeters))
         else:
             parent.setEvalErrorString("Error: invalid unit")
         return
@@ -231,7 +231,7 @@ def st_geodesic_distance(values, feature, parent):
         else:
             geom1 = values[0]
             geom2 = values[1]
-            if geom1.type() != QgsWkbTypes.PointGeometry  or geom2.type() != QgsWkbTypes.PointGeometry:
+            if geom1.type() != QgsWkbTypes.GeometryType.PointGeometry  or geom2.type() != QgsWkbTypes.GeometryType.PointGeometry:
                 parent.setEvalErrorString("Error: invalid point geometry")
             pt1 = geom1.asPoint()
             pt2 = geom2.asPoint()
@@ -295,7 +295,7 @@ def st_geodesic_bearing(values, feature, parent):
         else:
             geom1 = values[0]
             geom2 = values[1]
-            if geom1.type() != QgsWkbTypes.PointGeometry  or geom2.type() != QgsWkbTypes.PointGeometry:
+            if geom1.type() != QgsWkbTypes.GeometryType.PointGeometry  or geom2.type() != QgsWkbTypes.GeometryType.PointGeometry:
                 parent.setEvalErrorString("Error: invalid point geometry")
             pt1 = geom1.asPoint()
             pt2 = geom2.asPoint()
@@ -383,15 +383,15 @@ def st_geodesic_transform(values, feature, parent):
         elif unit == 'km':
             factor = 1000.0
         elif unit == 'in':
-            factor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceFeet, QgsUnitTypes.DistanceMeters) / 12.0
+            factor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceFeet, QgsUnitTypes.DistanceUnit.DistanceMeters) / 12.0
         elif unit == 'ft':
-            factor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceFeet, QgsUnitTypes.DistanceMeters)
+            factor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceFeet, QgsUnitTypes.DistanceUnit.DistanceMeters)
         elif unit == 'yard':
-            factor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceYards, QgsUnitTypes.DistanceMeters)
+            factor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceYards, QgsUnitTypes.DistanceUnit.DistanceMeters)
         elif unit == 'mi':
-            factor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceMiles, QgsUnitTypes.DistanceMeters)
+            factor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceMiles, QgsUnitTypes.DistanceUnit.DistanceMeters)
         elif unit == 'nm':
-            factor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceNauticalMiles, QgsUnitTypes.DistanceMeters)
+            factor = QgsUnitTypes.fromUnitToUnitFactor(QgsUnitTypes.DistanceUnit.DistanceNauticalMiles, QgsUnitTypes.DistanceUnit.DistanceMeters)
         else:
             parent.setEvalErrorString("Error: invalid unit")
 

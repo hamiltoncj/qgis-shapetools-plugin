@@ -38,7 +38,7 @@ class IdlBreakLineAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterFeatureSource(
                 self.PrmInputLayer,
                 tr('Input layer'),
-                [QgsProcessing.TypeFile | QgsProcessing.TypeVectorLine])
+                [QgsProcessing.SourceType.TypeFile | QgsProcessing.SourceType.TypeVectorLine])
         )
         self.addParameter(
             QgsProcessingParameterFeatureSink(
@@ -54,7 +54,7 @@ class IdlBreakLineAlgorithm(QgsProcessingAlgorithm):
 
         (sink, dest_id) = self.parameterAsSink(
             parameters, self.PrmOutputLayer, context, source.fields(),
-            QgsWkbTypes.MultiLineString, srcCRS)
+            QgsWkbTypes.Type.MultiLineString, srcCRS)
 
         # Set up CRS transformations
         if srcCRS != epsg4326:
@@ -124,7 +124,7 @@ class IdlBreakLineAlgorithm(QgsProcessingAlgorithm):
         file = os.path.dirname(__file__) + '/index.html'
         if not os.path.exists(file):
             return ''
-        return QUrl.fromLocalFile(file).toString(QUrl.FullyEncoded)
+        return QUrl.fromLocalFile(file).toString(QUrl.ComponentFormattingOption.FullyEncoded)
 
     def shortHelpString(self):
         file = os.path.dirname(__file__) + '/doc/GeodesicBreakLineAlgorithm.help'
