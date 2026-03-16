@@ -38,6 +38,7 @@ class GeodesicMeasureTool(QgsMapTool):
         self.canvas = iface.mapCanvas()
         self.measureDialog = GeodesicMeasureDialog(shapetools, iface, parent)
         self.vertex = None
+        self.rightbtn_cnt = 0
 
     def activate(self):
         '''When activated set the cursor to a crosshair.'''
@@ -70,13 +71,18 @@ class GeodesicMeasureTool(QgsMapTool):
             self.measureDialog.show()
             self.measureDialog.updateRBColor()
             return
+        button = event.button()
         if not self.measureDialog.ready():
+            if button == Qt.MouseButton.RightButton and self.rightbtn_cnt == 1:
+                self.rightbtn_cnt = 0
+                self.measureDialog.clear()
             return
         pt = self.snappoint(event.originalPixelPoint())
-        button = event.button()
-        if button == 2:
+        if button == Qt.MouseButton.RightButton:
+            self.rightbtn_cnt = 1
             self.measureDialog.endRubberband()
             return
+        self.rightbtn_cnt = 0
         canvasCRS = self.canvas.mapSettings().destinationCrs()
         if canvasCRS != epsg4326:
             transform = QgsCoordinateTransform(canvasCRS, epsg4326, QgsProject.instance())
